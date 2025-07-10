@@ -11,9 +11,11 @@ import QrCode from "./components/QrCode";
 import CopyLink from "./components/CopyLink";
 
 export default function Affiliate() {
-  const { affiliate } = useApp();
+  const { getAffiliateLink } = useApp();
 
-  const affUrl = affiliate?.url || "";
+  const affUrl = getAffiliateLink({
+    path: "/#/home"
+  });
 
   return (
     <Flex direction="column" gap={3} marginTop={2}>
