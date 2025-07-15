@@ -1,11 +1,12 @@
-# Block Lotto Dev Kit
+# Block Lotto Devkit
 
 ## Features
 
--   [BIP70](https://github.com/bitcoin/bips/blob/master/bip-0070.mediawiki) and [Simple Ledger Payment Protocol](https://github.com/simpleledger/slp-specifications/blob/master/slp-payment-protocol.md) Support
--   [Simple Ledger Postage Protocol](https://github.com/simpleledger/slp-specifications/blob/master/slp-postage-protocol.md) Support
--   [Simple Ledger Self Mint Token](https://github.com/badger-cash/slp-self-mint-protocol/blob/master/selfmint-specification.md) Support
--   [SLP Token Type 1 Burn](https://github.com/badger-cash/slp-self-mint-protocol/blob/master/token-type1-burn.md) Support
+-   Implementation of the [SLP Block Lotto Protocol](https://github.com/badger-cash/block-lotto-specification/blob/main/README.md) and the [blocklotto-sdk](https://www.npmjs.com/package/blocklotto-sdk).
+
+## Documentation
+
+For the full guide and Block Lotto documentation, please refer to our [website](https://lotto.mp) and [official documentation](https://docs.lotto.mp).
 
 ## Development
 
@@ -35,7 +36,3 @@ The build is minified and the filenames include the hashes.<br>
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-## Documentation
-
-For the full guide and API documentation, please refer to the [official documentation](./README.md)
