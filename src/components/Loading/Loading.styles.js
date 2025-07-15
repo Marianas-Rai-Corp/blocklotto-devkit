@@ -5,6 +5,7 @@ export const Backdrop = styled(BackgroundCover)`
   display: flex;
   justify-content: center;
   align-items: center;
+  text-transform: uppercase;
 `
 
 export const spin = keyframes`
@@ -36,6 +37,6 @@ export const ModalContent = styled.div`
   padding-top: ${({ theme }) => theme.spacing(3)};
   padding-bottom: ${({ theme }) => theme.spacing(3)};
   background-color: ${({ theme }) => theme.color.common.white || '#fff'};
-  border-radius: ${({ theme }) => theme.shape.lg || '0.5rem'};
+  border-radius: ${({ theme }) => theme.shape.sm || '0.5rem'};
   box-shadow: ${({ theme }) => theme.shadows[6] || '0 4px 30px rgba(0, 0, 0, 0.1)'};
 `

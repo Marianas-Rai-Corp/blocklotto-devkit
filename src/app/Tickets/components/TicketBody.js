@@ -1,17 +1,13 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-import { useApp, useNotifications } from "blocklotto-sdk";
-import sleep from "../../../utils/sleep";
+import { useNotifications } from "blocklotto-sdk";
 
 import { Flex, Divider } from "@components/Common";
 import Typography from "@components/Typography";
 import Button from "@components/Button";
-import { CopyIcon } from "../../../components/Icons/CopyIcon";
-
-const shortifyHash = (hash, length) => {
-  return String(hash.slice(0, length) + "..." + hash.slice(64 - length));
-};
+import { CopyIcon } from "@components/Icons/CopyIcon";
+import { shortifyHash } from "@utils/shortifyHash";
 
 export default function TicketBody({
   issueDisplayTime,
@@ -23,9 +19,11 @@ export default function TicketBody({
   displayResultingNumbers,
   combinedNumbers,
 }) {
-  const { setTicketsToRedeem, setLoadingStatus } = useApp();
   const history = useHistory();
   const notify = useNotifications();
+
+  const hash = ticket.issueTx.hash;
+  const shortenedHash = shortifyHash(hash, 8);
 
   // handlers
   const handleCopy = (copy) => {
@@ -33,12 +31,8 @@ export default function TicketBody({
     notify({ message: "Copied to clipboard", type: "success" });
   };
 
-  const handleRedeemTicket = async (e) => {
-    e.stopPropagation();
-    setLoadingStatus("LOADING TICKET");
-    setTicketsToRedeem([ticket]);
-    await sleep(1000);
-    history.push("/waitingroom");
+  const handleRedeemTicket = async () => {
+    history.push("/waitingroom?ticket=" + hash);
   };
 
   return (
@@ -69,9 +63,7 @@ export default function TicketBody({
             onClick={() => handleCopy(ticket.issueTx.hash)}
           >
             <CopyIcon />
-            <Typography variant="body2">
-              {shortifyHash(ticket.issueTx.hash, 8)}
-            </Typography>
+            <Typography variant="body2">{shortenedHash}</Typography>
           </Flex>
         </Flex>
         <Flex justifyContent="space-between" width="100%">
@@ -115,55 +107,63 @@ export default function TicketBody({
               </Flex>
             )}
 
-            <Divider />
+            {combinedNumbers &&
+              ticket.parsed?.opponentNumbers &&
+              ticket.parsed?.resultingNumbers && (
+                <>
+                  <Divider />
 
-            {combinedNumbers && (
-              <>
-                <Typography>Ticket Calculations</Typography>
-                <table>
-                  <thead style={{ textAlign: "left" }}>
-                    <tr>
-                      <th key={0}>You</th>
-                      <th key={1}>Block</th>
-                      <th key={2}>Combination</th>
-                      <th key={3}>Module</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {ticket.parsed.playerNumbers.map((choice, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{choice}</td>
-                          <td>{ticket.parsed?.opponentNumbers[index]}</td>
-                          <td>{combinedNumbers[index]}</td>
-                          <td>{ticket.parsed?.resultingNumbers[index]}</td>
-                        </tr>
-                      );
-                    })}
-                    <tr key={"summary"}>
-                      <td key={0}></td>
-                      <td key={1}></td>
-                      <td key={2}></td>
-                      <td key={3}>
-                        <b>
-                          {ticket.parsed?.resultingNumbers?.reduce(
-                            (acc, number) => acc + number,
-                            0
-                          )}
-                        </b>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </>
-            )}
+                  <Typography>Ticket Calculations</Typography>
+                  <table>
+                    <thead style={{ textAlign: "left" }}>
+                      <tr>
+                        <th key={0}>You</th>
+                        <th key={1}>Block</th>
+                        <th key={2}>Combination</th>
+                        <th key={3}>Module</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ticket.parsed?.playerNumbers.map((choice, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>{choice}</td>
+                            <td>
+                              {ticket.parsed?.opponentNumbers &&
+                                ticket.parsed?.opponentNumbers[index]}
+                            </td>
+                            <td>{combinedNumbers[index]}</td>
+                            <td>
+                              {ticket.parsed?.resultingNumbers &&
+                                ticket.parsed?.resultingNumbers[index]}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      <tr key={"summary"}>
+                        <td key={0}></td>
+                        <td key={1}></td>
+                        <td key={2}></td>
+                        <td key={3}>
+                          <b>
+                            {ticket.parsed?.resultingNumbers?.reduce(
+                              (acc, number) => acc + number,
+                              0
+                            )}
+                          </b>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </>
+              )}
           </>
         ) : (
           <Flex width="100%" paddingTop={1}>
             <Button
               size="sm"
               fullWidth
-              onClick={(e) => handleRedeemTicket(e)}
+              onClick={handleRedeemTicket}
               color={ticket.issueTx?.height > 0 ? "primary" : "secondary"}
             >
               {ticket.issueTx?.height > 0 ? "Redeem" : "Request Redemption"}
