@@ -1,8 +1,7 @@
 {
-  "name": "block-lotto-dev-kit",
-  "version": "0.9.5",
-  "private": true,
-  "homepage": "https://blocklotto.mp/",
+  "name": "blocklotto-devkit",
+  "version": "1.0.0",
+  "homepage": "https://sdk.lotto.mp/",
   "license": "MIT license",
   "dependencies": {
     "@lottiefiles/dotlottie-react": "^0.14.0",
